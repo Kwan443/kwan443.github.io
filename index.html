@@ -294,6 +294,8 @@
           this.audioEl.pause();
         }
         this.audioEl.currentTime = 0;
+        // Additional cleanup for audio
+        this.audioEl.load(); // This resets the audio element completely
       };
 
       this.el.addEventListener('markerfound', () => {
@@ -390,8 +392,9 @@
             this.videoEl.playsinline = true;
             this.videoEl.loop = true;
             
-            // Ensure video is paused initially
+            // Ensure video is paused and reset initially
             this.videoEl.pause();
+            this.videoEl.currentTime = 0;
           }
         }
         return;
@@ -408,7 +411,6 @@
             .catch(e => {
               console.log('Video play failed:', e);
               // If play fails due to autoplay restrictions, try with user interaction simulation
-              // Note: Sound may still be blocked by browser
               setTimeout(() => {
                 this.videoEl.play().catch(err => {
                   console.log('Second play attempt failed:', err);
@@ -420,12 +422,55 @@
             });
         }
       } else {
+        // COMPLETELY CLOSE THE VIDEO
         if (!this.videoEl.paused) {
-          console.log('Pausing video');
+          console.log('Pausing and resetting video');
           this.videoEl.pause();
+        }
+        
+        // Reset video to beginning and clear buffer
+        if (this.videoEl.currentTime > 0) {
+          this.videoEl.currentTime = 0;
+        }
+        
+        // OPTIONAL: Completely unload the video to free resources
+        // This is more aggressive and will release memory
+        if (this.videoEl.readyState > 0) {
+          // For mobile browsers, you can also try to remove the source
+          // But careful - this may affect reloading when marker is found again
+          // Uncomment the following lines if you want the most aggressive cleanup:
+          /*
+          this.videoEl.pause();
+          this.videoEl.removeAttribute('src');
+          this.videoEl.load();
+          this.videoEl = null; // Force re-initialization on next tick
+          */
         }
       }
     }
+  });
+
+  // Add a global cleanup function to ensure all videos are properly closed
+  // when the page is hidden or user navigates away
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      // Page is hidden (user switched tabs or minimized browser)
+      const videos = document.querySelectorAll('video');
+      videos.forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+  });
+
+  // Handle page unload
+  window.addEventListener('beforeunload', function() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    });
   });
 </script>
 </body>
