@@ -343,11 +343,38 @@
       this.el.addEventListener('markerfound', () => {
         console.log('Marker found for video');
         this.isMarkerVisible = true;
+        // If we previously unloaded the video's src to free memory, restore it
+        if (this.videoEl && (!this.videoEl.src || this.videoEl.src === '')) {
+          try {
+            if (this.originalSrc) {
+              this.videoEl.src = this.originalSrc;
+              this.videoEl.load();
+            }
+          } catch (e) { console.warn('Restore video src failed', e); }
+        }
       });
-      
+
       this.el.addEventListener('markerlost', () => {
         console.log('Marker lost for video');
         this.isMarkerVisible = false;
+        // Unload to free memory on mobile devices
+        if (this.videoEl) {
+          try {
+            this.videoEl.pause();
+            this.videoEl.currentTime = 0;
+            // store original src if not stored yet
+            if (!this.originalSrc) this.originalSrc = this.videoEl.getAttribute('src') || this.videoEl.src;
+            // remove source and reset
+            this.videoEl.removeAttribute('src');
+            this.videoEl.src = '';
+            this.videoEl.load();
+            // If the video was a blob URL, revoke it (safe-guard)
+            if (this.videoEl._blobUrl) {
+              try { URL.revokeObjectURL(this.videoEl._blobUrl); } catch(e){}
+              this.videoEl._blobUrl = null;
+            }
+          } catch (e) { console.warn('Unload video failed', e); }
+        }
       });
       
       // Alternative event listeners on the scene
@@ -427,6 +454,45 @@
       }
     }
   });
+  // Global marker visibility tracking and pause all when no markers visible
+  (function() {
+    const pauseAll = () => {
+      const videos = document.querySelectorAll('video');
+      videos.forEach(v => {
+        try { v.pause(); v.currentTime = 0; } catch(e) { console.warn(e); }
+      });
+      const audios = document.querySelectorAll('audio');
+      audios.forEach(a => {
+        try { a.pause(); a.currentTime = 0; } catch(e) { console.warn(e); }
+      });
+    };
+
+    const scene = document.querySelector('a-scene');
+    if (!scene) return;
+    const visibleMarkers = new Set();
+
+    scene.addEventListener('markerFound', (event) => {
+      if (event && event.target && event.target.id) {
+        visibleMarkers.add(event.target.id);
+      }
+    });
+    scene.addEventListener('markerLost', (event) => {
+      if (event && event.target && event.target.id) {
+        visibleMarkers.delete(event.target.id);
+      }
+      if (visibleMarkers.size === 0) {
+        console.log('No markers visible — pausing all media');
+        pauseAll();
+      }
+    });
+
+    // Also pause when page hidden (tab switch or phone sleep)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        pauseAll();
+      }
+    });
+  })();
 </script>
 </body>
 </html>
