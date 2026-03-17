@@ -27,12 +27,16 @@
             renderer="colorManagement: true;"
         >
             <a-assets>
+                <video id="video1" src="assets/artwork1.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video2" src="assets/artwork2.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video3" src="assets/artwork3.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video4" src="assets/artwork4.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video5" src="assets/artwork5.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video6" src="assets/artwork6.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
                 <video id="video7" src="assets/artwork7.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+                <video id="video8" src="assets/artwork8.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+                <audio id="audio1" src="assets/artwork1.mp3" preload="auto" crossorigin="anonymous"></audio>
+                <audio id="audio8" src="assets/artwork8.mp3" preload="auto" crossorigin="anonymous"></audio>
             </a-assets>
 
             <a-marker
@@ -43,14 +47,20 @@
                 raycaster="objects: .clickable"
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
+                marker-audio-handler="audioId: audio1"
             >
-                <a-image
-                    src="assets/artwork1.jpeg"
+                <a-video
+                    src="#video1"
                     scale="5 2 1"
                     class="clickable scaled-media"
                     rotation="-90 0 0"
                     gesture-handler
-                ></a-image>
+                    loop
+                    video-handler
+                    playsinline="true"
+                    preload="auto"
+                    autoplay="false"
+                ></a-video>
             </a-marker>
             
             <a-marker
@@ -199,34 +209,130 @@
                 raycaster="objects: .clickable"
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
+                marker-audio-handler="audioId: audio8"
             >
-                <a-image
-                    src="assets/artwork8.jpeg"
+                <a-video
+                    src="#video8"
                     scale="1 1 1"
-                    class="clickable"
+                    class="clickable scaled-media"
                     rotation="-90 0 0"
                     gesture-handler
-                ></a-image>
+                    loop
+                    video-handler
+                    playsinline="true"
+                    preload="auto"
+                    autoplay="false"
+                ></a-video>
             </a-marker>
-
+            
             <a-entity camera></a-entity>
         </a-scene>
 
 <script>
-  // Initialize videos with sound enabled (but browser may still mute them)
+  // Initialize media and unlock audio on first user interaction
   window.onload = function() {
-    const videoIds = ['video2', 'video3', 'video4', 'video5', 'video6', 'video7'];
+    const videoIds = ['video1', 'video2', 'video3', 'video4', 'video5', 'video6', 'video7', 'video8'];
+    const audioIds = ['audio1', 'audio8'];
+
     videoIds.forEach(id => {
       const video = document.getElementById(id);
       if (video) {
         video.load();
-        video.muted = false; // Try to enable sound
+        video.muted = false;
         video.playsinline = true;
-        // Try to play to satisfy browser policies
         video.play().catch(e => console.log('Video preload play prevented:', e));
       }
     });
+
+    audioIds.forEach(id => {
+      const audio = document.getElementById(id);
+      if (audio) {
+        audio.load();
+      }
+    });
+
+    const unlockAudio = () => {
+      audioIds.forEach(id => {
+        const audio = document.getElementById(id);
+        if (!audio) return;
+        audio.play()
+          .then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+          })
+          .catch(e => console.log('Audio unlock failed:', e));
+      });
+
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    };
+
+    document.addEventListener('click', unlockAudio, { once: true });
+    document.addEventListener('touchstart', unlockAudio, { once: true });
   };
+
+  AFRAME.registerComponent('marker-audio-handler', {
+    schema: {
+      audioId: { type: 'string' }
+    },
+
+    init: function () {
+      this.audioEl = document.getElementById(this.data.audioId);
+      this.isMarkerVisible = false;
+
+      const playAudio = () => {
+        if (!this.audioEl) return;
+        if (this.audioEl.paused) {
+          this.audioEl.currentTime = 0;
+          this.audioEl.play().catch(e => console.log('Audio play failed:', e));
+        }
+      };
+
+      const stopAudio = () => {
+        if (!this.audioEl) return;
+        if (!this.audioEl.paused) {
+          this.audioEl.pause();
+        }
+        this.audioEl.currentTime = 0;
+      };
+
+      this.el.addEventListener('markerfound', () => {
+        this.isMarkerVisible = true;
+        playAudio();
+      });
+
+      this.el.addEventListener('markerFound', () => {
+        this.isMarkerVisible = true;
+        playAudio();
+      });
+
+      this.el.addEventListener('markerlost', () => {
+        this.isMarkerVisible = false;
+        stopAudio();
+      });
+
+      this.el.addEventListener('markerLost', () => {
+        this.isMarkerVisible = false;
+        stopAudio();
+      });
+
+      if (this.el.sceneEl) {
+        this.el.sceneEl.addEventListener('markerFound', (event) => {
+          if (event.target === this.el) {
+            this.isMarkerVisible = true;
+            playAudio();
+          }
+        });
+
+        this.el.sceneEl.addEventListener('markerLost', (event) => {
+          if (event.target === this.el) {
+            this.isMarkerVisible = false;
+            stopAudio();
+          }
+        });
+      }
+    }
+  });
 
   AFRAME.registerComponent('video-handler', {
     init: function () {
