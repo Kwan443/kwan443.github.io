@@ -1,477 +1,337 @@
 <!doctype html>
 <html>
-    <head>
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
-    </head>
 
-    <body style="margin: 0; overflow: hidden;">
-    <style>
-        .scaled-media {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
+<head>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script
+    src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+  <script
+    src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+  <style>
+    .scaled-media {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+
+  <a-scene vr-mode-ui="enabled: false;" loading-screen="enabled: false;"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;" id="scene" embedded gesture-detector
+    renderer="colorManagement: true;">
+    <a-assets>
+      <video id="video1" src="assets/artwork1.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video2" src="assets/artwork2.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video3" src="assets/artwork3.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video4" src="assets/artwork4.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video5" src="assets/artwork5.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video6" src="assets/artwork6.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video7" src="assets/artwork7.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <video id="video8" src="assets/artwork8.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
+      <audio id="audio1" src="assets/artwork1.mp3" preload="auto" crossorigin="anonymous"></audio>
+      <audio id="audio8" src="assets/artwork8.mp3" preload="auto" crossorigin="anonymous"></audio>
+    </a-assets>
+
+    <a-marker id="marker1" type="pattern" preset="custom" url="assets/artwork1.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-audio-handler="audioId: audio1">
+      <a-video src="#video1" scale="4.5 2 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
+        video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker2" type="pattern" preset="custom" url="assets/artwork2.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video2" position="-4 0 4.5" scale="10 10 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker3" type="pattern" preset="custom" url="assets/artwork3.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video3" scale="1.34 2 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
+        video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker4" type="pattern" preset="custom" url="assets/artwork4.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video4" position="-5.5 0 -3" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker5" type="pattern" preset="custom" url="assets/artwork5.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video5" position="-5.5 0 -3" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker6" type="pattern" preset="custom" url="assets/artwork6.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video6" position="-3.5 0 -4" scale="9 11 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker7" type="pattern" preset="custom" url="assets/artwork7.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-video src="#video7" scale="2 2 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
+        video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-marker id="marker8" type="pattern" preset="custom" url="assets/artwork8.patt" raycaster="objects: .clickable"
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-audio-handler="audioId: audio8">
+      <a-video src="#video8" position="-5.5 0 -4" scale="12 9 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // Initialize media and unlock audio on first user interaction
+    window.onload = function () {
+      const videoIds = ['video1', 'video2', 'video3', 'video4', 'video5', 'video6', 'video7', 'video8'];
+      const audioIds = ['audio1', 'audio8'];
+
+      videoIds.forEach(id => {
+        const video = document.getElementById(id);
+        if (video) {
+          video.load();
+          video.muted = false;
+          video.playsinline = true;
+          video.play().catch(e => console.log('Video preload play prevented:', e));
         }
-    </style>
+      });
 
-        <a-scene
-            vr-mode-ui="enabled: false;"
-            loading-screen="enabled: false;"
-            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-            id="scene"
-            embedded
-            gesture-detector
-            renderer="colorManagement: true;"
-        >
-            <a-assets>
-                <video id="video1" src="assets/artwork1.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video2" src="assets/artwork2.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video3" src="assets/artwork3.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video4" src="assets/artwork4.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video5" src="assets/artwork5.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video6" src="assets/artwork6.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video7" src="assets/artwork7.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <video id="video8" src="assets/artwork8.mp4" preload="auto" loop playsinline crossorigin="anonymous"></video>
-                <audio id="audio1" src="assets/artwork1.mp3" preload="auto" crossorigin="anonymous"></audio>
-                <audio id="audio8" src="assets/artwork8.mp3" preload="auto" crossorigin="anonymous"></audio>
-            </a-assets>
-
-            <a-marker
-                id="marker1"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork1.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-                marker-audio-handler="audioId: audio1"
-            >
-                <a-video
-                    src="#video1"
-                    scale="4.5 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker2"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork2.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video2"
-                    scale="2 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker3"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork3.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video3"
-                    scale="1.34 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker4"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork4.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video4"
-                    scale="2.5 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker5"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork5.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video5"
-                    scale="2.4 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker6"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork6.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video6"
-                    scale="2 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker7"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork7.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-            >
-                <a-video
-                    src="#video7"
-                    scale="2 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-marker
-                id="marker8"
-                type="pattern"
-                preset="custom"
-                url="assets/artwork8.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-                marker-audio-handler="audioId: audio8"
-            >
-                <a-video
-                    src="#video8"
-                    scale="2.6 2 1"
-                    class="clickable scaled-media"
-                    rotation="-90 0 0"
-                    gesture-handler
-                    loop
-                    video-handler
-                    playsinline="true"
-                    preload="auto"
-                    autoplay="false"
-                ></a-video>
-            </a-marker>
-            
-            <a-entity camera></a-entity>
-        </a-scene>
-
-<script>
-  // Initialize media and unlock audio on first user interaction
-  window.onload = function() {
-    const videoIds = ['video1', 'video2', 'video3', 'video4', 'video5', 'video6', 'video7', 'video8'];
-    const audioIds = ['audio1', 'audio8'];
-
-    videoIds.forEach(id => {
-      const video = document.getElementById(id);
-      if (video) {
-        video.load();
-        video.muted = false;
-        video.playsinline = true;
-        video.play().catch(e => console.log('Video preload play prevented:', e));
-      }
-    });
-
-    audioIds.forEach(id => {
-      const audio = document.getElementById(id);
-      if (audio) {
-        audio.load();
-      }
-    });
-
-    const unlockAudio = () => {
       audioIds.forEach(id => {
         const audio = document.getElementById(id);
-        if (!audio) return;
-        audio.play()
-          .then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-          })
-          .catch(e => console.log('Audio unlock failed:', e));
+        if (audio) {
+          audio.load();
+        }
       });
 
-      document.removeEventListener('click', unlockAudio);
-      document.removeEventListener('touchstart', unlockAudio);
+      const unlockAudio = () => {
+        audioIds.forEach(id => {
+          const audio = document.getElementById(id);
+          if (!audio) return;
+          audio.play()
+            .then(() => {
+              audio.pause();
+              audio.currentTime = 0;
+            })
+            .catch(e => console.log('Audio unlock failed:', e));
+        });
+
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+      };
+
+      document.addEventListener('click', unlockAudio, { once: true });
+      document.addEventListener('touchstart', unlockAudio, { once: true });
     };
 
-    document.addEventListener('click', unlockAudio, { once: true });
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-  };
+    AFRAME.registerComponent('marker-audio-handler', {
+      schema: {
+        audioId: { type: 'string' }
+      },
 
-  AFRAME.registerComponent('marker-audio-handler', {
-    schema: {
-      audioId: { type: 'string' }
-    },
+      init: function () {
+        this.audioEl = document.getElementById(this.data.audioId);
+        this.isMarkerVisible = false;
 
-    init: function () {
-      this.audioEl = document.getElementById(this.data.audioId);
-      this.isMarkerVisible = false;
+        const playAudio = () => {
+          if (!this.audioEl) return;
+          if (this.audioEl.paused) {
+            this.audioEl.currentTime = 0;
+            this.audioEl.play().catch(e => console.log('Audio play failed:', e));
+          }
+        };
 
-      const playAudio = () => {
-        if (!this.audioEl) return;
-        if (this.audioEl.paused) {
+        const stopAudio = () => {
+          if (!this.audioEl) return;
+          if (!this.audioEl.paused) {
+            this.audioEl.pause();
+          }
           this.audioEl.currentTime = 0;
-          this.audioEl.play().catch(e => console.log('Audio play failed:', e));
+          // Additional cleanup for audio
+          this.audioEl.load(); // This resets the audio element completely
+        };
+
+        this.el.addEventListener('markerfound', () => {
+          this.isMarkerVisible = true;
+          playAudio();
+        });
+
+        this.el.addEventListener('markerFound', () => {
+          this.isMarkerVisible = true;
+          playAudio();
+        });
+
+        this.el.addEventListener('markerlost', () => {
+          this.isMarkerVisible = false;
+          stopAudio();
+        });
+
+        this.el.addEventListener('markerLost', () => {
+          this.isMarkerVisible = false;
+          stopAudio();
+        });
+
+        if (this.el.sceneEl) {
+          this.el.sceneEl.addEventListener('markerFound', (event) => {
+            if (event.target === this.el) {
+              this.isMarkerVisible = true;
+              playAudio();
+            }
+          });
+
+          this.el.sceneEl.addEventListener('markerLost', (event) => {
+            if (event.target === this.el) {
+              this.isMarkerVisible = false;
+              stopAudio();
+            }
+          });
         }
-      };
+      }
+    });
 
-      const stopAudio = () => {
-        if (!this.audioEl) return;
-        if (!this.audioEl.paused) {
-          this.audioEl.pause();
-        }
-        this.audioEl.currentTime = 0;
-        // Additional cleanup for audio
-        this.audioEl.load(); // This resets the audio element completely
-      };
-
-      this.el.addEventListener('markerfound', () => {
-        this.isMarkerVisible = true;
-        playAudio();
-      });
-
-      this.el.addEventListener('markerFound', () => {
-        this.isMarkerVisible = true;
-        playAudio();
-      });
-
-      this.el.addEventListener('markerlost', () => {
+    AFRAME.registerComponent('video-handler', {
+      init: function () {
+        this.videoEl = null;
         this.isMarkerVisible = false;
-        stopAudio();
-      });
 
-      this.el.addEventListener('markerLost', () => {
-        this.isMarkerVisible = false;
-        stopAudio();
-      });
+        // Wait for marker to be found
+        this.el.addEventListener('markerfound', () => {
+          console.log('Marker found for video');
+          this.isMarkerVisible = true;
+        });
 
-      if (this.el.sceneEl) {
+        this.el.addEventListener('markerlost', () => {
+          console.log('Marker lost for video');
+          this.isMarkerVisible = false;
+        });
+
+        // Alternative event listeners on the scene
         this.el.sceneEl.addEventListener('markerFound', (event) => {
-          if (event.target === this.el) {
+          if (event.target === this.el.parentEl) {
+            console.log('Marker found via scene event');
             this.isMarkerVisible = true;
-            playAudio();
           }
         });
 
         this.el.sceneEl.addEventListener('markerLost', (event) => {
-          if (event.target === this.el) {
+          if (event.target === this.el.parentEl) {
+            console.log('Marker lost via scene event');
             this.isMarkerVisible = false;
-            stopAudio();
           }
         });
-      }
-    }
-  });
+      },
 
-  AFRAME.registerComponent('video-handler', {
-    init: function () {
-      this.videoEl = null;
-      this.isMarkerVisible = false;
-      
-      // Wait for marker to be found
-      this.el.addEventListener('markerfound', () => {
-        console.log('Marker found for video');
-        this.isMarkerVisible = true;
-      });
-      
-      this.el.addEventListener('markerlost', () => {
-        console.log('Marker lost for video');
-        this.isMarkerVisible = false;
-      });
-      
-      // Alternative event listeners on the scene
-      this.el.sceneEl.addEventListener('markerFound', (event) => {
-        if (event.target === this.el.parentEl) {
-          console.log('Marker found via scene event');
-          this.isMarkerVisible = true;
-        }
-      });
-      
-      this.el.sceneEl.addEventListener('markerLost', (event) => {
-        if (event.target === this.el.parentEl) {
-          console.log('Marker lost via scene event');
-          this.isMarkerVisible = false;
-        }
-      });
-    },
-    
-    tick: function () {
-      // Get video element if not already obtained
-      if (!this.videoEl) {
-        // Try to get video element from material
-        if (this.el.components.material && 
-            this.el.components.material.material && 
+      tick: function () {
+        // Get video element if not already obtained
+        if (!this.videoEl) {
+          // Try to get video element from material
+          if (this.el.components.material &&
+            this.el.components.material.material &&
             this.el.components.material.material.map) {
-          
-          // Check if it's using a video element from a-assets
-          const src = this.el.getAttribute('src');
-          if (src && src.charAt(0) === '#') {
-            const videoId = src.substring(1);
-            this.videoEl = document.getElementById(videoId);
-          } else if (this.el.components.material.material.map.image) {
-            this.videoEl = this.el.components.material.material.map.image;
+
+            // Check if it's using a video element from a-assets
+            const src = this.el.getAttribute('src');
+            if (src && src.charAt(0) === '#') {
+              const videoId = src.substring(1);
+              this.videoEl = document.getElementById(videoId);
+            } else if (this.el.components.material.material.map.image) {
+              this.videoEl = this.el.components.material.material.map.image;
+            }
+
+            if (this.videoEl) {
+              console.log('Video element found:', this.videoEl);
+              // Try to enable sound (browser may still block)
+              this.videoEl.muted = false;
+              this.videoEl.playsinline = true;
+              this.videoEl.loop = true;
+
+              // Ensure video is paused and reset initially
+              this.videoEl.pause();
+              this.videoEl.currentTime = 0;
+            }
           }
-          
-          if (this.videoEl) {
-            console.log('Video element found:', this.videoEl);
-            // Try to enable sound (browser may still block)
-            this.videoEl.muted = false;
-            this.videoEl.playsinline = true;
-            this.videoEl.loop = true;
-            
-            // Ensure video is paused and reset initially
+          return;
+        }
+
+        // Play/pause based on marker visibility
+        if (this.isMarkerVisible) {
+          if (this.videoEl.paused) {
+            console.log('Starting video playback');
+            // Play with promise to handle autoplay restrictions
+            this.videoEl.currentTime = 0; // Start from beginning
+            this.videoEl.play()
+              .then(() => console.log('Video playing successfully'))
+              .catch(e => {
+                console.log('Video play failed:', e);
+                // If play fails due to autoplay restrictions, try with user interaction simulation
+                setTimeout(() => {
+                  this.videoEl.play().catch(err => {
+                    console.log('Second play attempt failed:', err);
+                    // Last resort - try with mute
+                    this.videoEl.muted = true;
+                    this.videoEl.play().catch(console.error);
+                  });
+                }, 100);
+              });
+          }
+        } else {
+          // COMPLETELY CLOSE THE VIDEO
+          if (!this.videoEl.paused) {
+            console.log('Pausing and resetting video');
             this.videoEl.pause();
+          }
+
+          // Reset video to beginning and clear buffer
+          if (this.videoEl.currentTime > 0) {
             this.videoEl.currentTime = 0;
           }
-        }
-        return;
-      }
-      
-      // Play/pause based on marker visibility
-      if (this.isMarkerVisible) {
-        if (this.videoEl.paused) {
-          console.log('Starting video playback');
-          // Play with promise to handle autoplay restrictions
-          this.videoEl.currentTime = 0; // Start from beginning
-          this.videoEl.play()
-            .then(() => console.log('Video playing successfully'))
-            .catch(e => {
-              console.log('Video play failed:', e);
-              // If play fails due to autoplay restrictions, try with user interaction simulation
-              setTimeout(() => {
-                this.videoEl.play().catch(err => {
-                  console.log('Second play attempt failed:', err);
-                  // Last resort - try with mute
-                  this.videoEl.muted = true;
-                  this.videoEl.play().catch(console.error);
-                });
-              }, 100);
-            });
-        }
-      } else {
-        // COMPLETELY CLOSE THE VIDEO
-        if (!this.videoEl.paused) {
-          console.log('Pausing and resetting video');
-          this.videoEl.pause();
-        }
-        
-        // Reset video to beginning and clear buffer
-        if (this.videoEl.currentTime > 0) {
-          this.videoEl.currentTime = 0;
-        }
-        
-        // OPTIONAL: Completely unload the video to free resources
-        // This is more aggressive and will release memory
-        if (this.videoEl.readyState > 0) {
-          // For mobile browsers, you can also try to remove the source
-          // But careful - this may affect reloading when marker is found again
-          // Uncomment the following lines if you want the most aggressive cleanup:
-          /*
-          this.videoEl.pause();
-          this.videoEl.removeAttribute('src');
-          this.videoEl.load();
-          this.videoEl = null; // Force re-initialization on next tick
-          */
-        }
-      }
-    }
-  });
 
-  // Add a global cleanup function to ensure all videos are properly closed
-  // when the page is hidden or user navigates away
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      // Page is hidden (user switched tabs or minimized browser)
+          // OPTIONAL: Completely unload the video to free resources
+          // This is more aggressive and will release memory
+          if (this.videoEl.readyState > 0) {
+            // For mobile browsers, you can also try to remove the source
+            // But careful - this may affect reloading when marker is found again
+            // Uncomment the following lines if you want the most aggressive cleanup:
+            /*
+            this.videoEl.pause();
+            this.videoEl.removeAttribute('src');
+            this.videoEl.load();
+            this.videoEl = null; // Force re-initialization on next tick
+            */
+          }
+        }
+      }
+    });
+
+    // Add a global cleanup function to ensure all videos are properly closed
+    // when the page is hidden or user navigates away
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        // Page is hidden (user switched tabs or minimized browser)
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
+    });
+
+    // Handle page unload
+    window.addEventListener('beforeunload', function () {
       const videos = document.querySelectorAll('video');
       videos.forEach(video => {
         video.pause();
-        video.currentTime = 0;
+        video.removeAttribute('src');
+        video.load();
       });
-    }
-  });
-
-  // Handle page unload
-  window.addEventListener('beforeunload', function() {
-    const videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>
