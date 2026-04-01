@@ -44,7 +44,7 @@
 
     <a-marker id="marker2" type="pattern" preset="custom" url="assets/artwork2.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-      <a-video src="#video2" position="0 0 0" scale="10 10 1" class="clickable scaled-media" rotation="-90 0 0"
+      <a-video src="#video2" position="-4 0 3" scale="10 10 1" class="clickable scaled-media" rotation="-90 0 0"
         gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
@@ -62,8 +62,10 @@
 
     <a-marker id="marker5" type="pattern" preset="custom" url="assets/artwork5.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-      <a-video src="#video5" position="-5.5 0 -3" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0"
-        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+      <a-entity position="-5.5 0 -3">
+        <a-video src="#video5" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
+          video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+      </a-entity>
     </a-marker>
 
     <a-marker id="marker6" type="pattern" preset="custom" url="assets/artwork6.patt" raycaster="objects: .clickable"
