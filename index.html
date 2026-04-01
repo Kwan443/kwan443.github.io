@@ -61,11 +61,11 @@
     </a-marker>
 
     <a-marker id="marker5" type="pattern" preset="custom" url="assets/artwork5.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-      <a-entity position="-5.5 0 -3">
-        <a-video src="#video5" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
-          video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
-      </a-entity>
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" smooth-tolerance="0.5">
+
+      <a-video src="#video5" position="-5.5 0 -3" scale="10 8 1" class="clickable scaled-media" rotation="-90 0 0"
+        gesture-handler loop video-handler playsinline="true" preload="auto" autoplay="false"></a-video>
+
     </a-marker>
 
     <a-marker id="marker6" type="pattern" preset="custom" url="assets/artwork6.patt" raycaster="objects: .clickable"
