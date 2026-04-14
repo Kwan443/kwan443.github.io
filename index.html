@@ -38,32 +38,32 @@
 
     <a-marker id="marker1" type="pattern" preset="custom" url="assets/artwork1.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-audio-handler="audioId: audio1"
-      marker-rotation-smoother="alpha: 0.1">
+      marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video1" scale="2.81 1.25 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
         video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker2" type="pattern" preset="custom" url="assets/artwork2.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.1">
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video2" scale="6.25 6.25 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker3" type="pattern" preset="custom" url="assets/artwork3.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.1">
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video3" scale="0.84 1.25 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker4" type="pattern" preset="custom" url="assets/artwork4.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.1">
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video4" scale="6.25 5 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker5" type="pattern" preset="custom" url="assets/artwork5.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;" smooth-tolerance="0.5"
-      marker-rotation-smoother="alpha: 0.1">
+      marker-rotation-smoother="alpha: 0.01">
 
       <a-video src="#video5" scale="6.25 5 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
@@ -71,20 +71,20 @@
     </a-marker>
 
     <a-marker id="marker6" type="pattern" preset="custom" url="assets/artwork6.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.1">
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video6" scale="5.63 6.88 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
         video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker7" type="pattern" preset="custom" url="assets/artwork7.patt" raycaster="objects: .clickable"
-      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.1">
+      emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video7" scale="1.25 1.25 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
     <a-marker id="marker8" type="pattern" preset="custom" url="assets/artwork8.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-audio-handler="audioId: audio8"
-      marker-rotation-smoother="alpha: 0.1">
+      marker-rotation-smoother="alpha: 0.01">
       <a-video src="#video8" scale="7.5 5.63 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler loop
         video-handler center-on-marker playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
@@ -366,7 +366,7 @@
 
     AFRAME.registerComponent('marker-rotation-smoother', {
       schema: {
-        alpha: { type: 'number', default: 0.2 }
+        alpha: { type: 'number', default: 0.01 }
       },
 
       init: function () {
