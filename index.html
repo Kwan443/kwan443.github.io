@@ -102,9 +102,10 @@
         const video = document.getElementById(id);
         if (video) {
           video.load();
-          video.muted = false;
+          video.loop = true;
+          video.muted = true;
           video.playsinline = true;
-          video.play().catch(e => console.log('Video preload play prevented:', e));
+          video.setAttribute('playsinline', '');
         }
       });
 
@@ -116,6 +117,19 @@
       });
 
       const unlockAudio = () => {
+        videoIds.forEach(id => {
+          const video = document.getElementById(id);
+          if (!video) return;
+
+          video.muted = false;
+          video.play()
+            .then(() => {
+              video.pause();
+              video.currentTime = 0;
+            })
+            .catch(e => console.log('Video unlock failed:', e));
+        });
+
         audioIds.forEach(id => {
           const audio = document.getElementById(id);
           if (!audio) return;
@@ -270,17 +284,15 @@
             console.log('Starting video playback');
             // Play with promise to handle autoplay restrictions
             this.videoEl.currentTime = 0; // Start from beginning
+            this.videoEl.muted = false;
             this.videoEl.play()
               .then(() => console.log('Video playing successfully'))
               .catch(e => {
                 console.log('Video play failed:', e);
-                // If play fails due to autoplay restrictions, try with user interaction simulation
+                // Retry once shortly after; avoid forcing mute so audio is not lost.
                 setTimeout(() => {
                   this.videoEl.play().catch(err => {
                     console.log('Second play attempt failed:', err);
-                    // Last resort - try with mute
-                    this.videoEl.muted = true;
-                    this.videoEl.play().catch(console.error);
                   });
                 }, 100);
               });
