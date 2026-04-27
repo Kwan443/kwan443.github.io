@@ -18,7 +18,131 @@
       max-width: 100%;
       max-height: 100%;
     }
+
+    #tuner-panel {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      width: min(340px, calc(100vw - 24px));
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(18, 18, 18, 0.86);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      backdrop-filter: blur(4px);
+    }
+
+    #tuner-panel h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    #tuner-panel .row {
+      display: grid;
+      grid-template-columns: 72px 1fr 82px;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    #tuner-panel .row label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    #tuner-panel input[type='range'] {
+      width: 100%;
+    }
+
+    #tuner-panel input[type='number'],
+    #tuner-panel select,
+    #tuner-panel textarea,
+    #tuner-panel button {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 12px;
+    }
+
+    #tuner-panel select,
+    #tuner-panel button,
+    #tuner-panel textarea {
+      width: 100%;
+    }
+
+    #tuner-panel textarea {
+      margin-top: 8px;
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    #tuner-panel .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    #tuner-panel .hint {
+      margin-top: 8px;
+      font-size: 11px;
+      opacity: 0.8;
+    }
   </style>
+
+  <div id="tuner-panel">
+    <h2>Marker Tuner</h2>
+
+    <div class="row">
+      <label for="tuner-marker">Marker</label>
+      <select id="tuner-marker"></select>
+      <span id="tuner-selected">-</span>
+    </div>
+
+    <div class="row">
+      <label for="scale-x">Scale X</label>
+      <input id="scale-x" type="range" min="0.1" max="20" step="0.01">
+      <input id="scale-x-num" type="number" min="0.1" max="20" step="0.01">
+    </div>
+    <div class="row">
+      <label for="scale-y">Scale Y</label>
+      <input id="scale-y" type="range" min="0.1" max="20" step="0.01">
+      <input id="scale-y-num" type="number" min="0.1" max="20" step="0.01">
+    </div>
+    <div class="row">
+      <label for="scale-z">Scale Z</label>
+      <input id="scale-z" type="range" min="0.1" max="20" step="0.01">
+      <input id="scale-z-num" type="number" min="0.1" max="20" step="0.01">
+    </div>
+
+    <div class="row">
+      <label for="offset-x">Offset X</label>
+      <input id="offset-x" type="range" min="-10" max="10" step="0.01">
+      <input id="offset-x-num" type="number" min="-10" max="10" step="0.01">
+    </div>
+    <div class="row">
+      <label for="offset-y">Offset Y</label>
+      <input id="offset-y" type="range" min="-10" max="10" step="0.01">
+      <input id="offset-y-num" type="number" min="-10" max="10" step="0.01">
+    </div>
+    <div class="row">
+      <label for="offset-z">Offset Z</label>
+      <input id="offset-z" type="range" min="-10" max="10" step="0.01">
+      <input id="offset-z-num" type="number" min="-10" max="10" step="0.01">
+    </div>
+
+    <textarea id="tuner-code" readonly></textarea>
+    <div class="btn-row">
+      <button id="copy-code" type="button">Copy Code</button>
+      <button id="reset-current" type="button">Reset Current</button>
+    </div>
+    <div class="hint">Tune one marker at a time. The numbers update live and the code is ready to paste.</div>
+  </div>
 
   <a-scene vr-mode-ui="enabled: false;" loading-screen="enabled: false;"
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;" id="scene" embedded gesture-detector
@@ -93,6 +217,216 @@
   </a-scene>
 
   <script>
+    function initMarkerTuner() {
+      const markerSelect = document.getElementById('tuner-marker');
+      const selectedLabel = document.getElementById('tuner-selected');
+      const codeOutput = document.getElementById('tuner-code');
+      const copyBtn = document.getElementById('copy-code');
+      const resetBtn = document.getElementById('reset-current');
+
+      if (!markerSelect || !selectedLabel || !codeOutput || !copyBtn || !resetBtn) return;
+
+      const controls = {
+        scaleX: bindPair('scale-x', 'scale-x-num'),
+        scaleY: bindPair('scale-y', 'scale-y-num'),
+        scaleZ: bindPair('scale-z', 'scale-z-num'),
+        offsetX: bindPair('offset-x', 'offset-x-num'),
+        offsetY: bindPair('offset-y', 'offset-y-num'),
+        offsetZ: bindPair('offset-z', 'offset-z-num')
+      };
+
+      const markerData = [];
+      document.querySelectorAll('a-marker').forEach(markerEl => {
+        const videoEl = markerEl.querySelector('a-video');
+        if (!videoEl || !markerEl.id) return;
+
+        const scale = toVector(videoEl.getAttribute('scale'), { x: 1, y: 1, z: 1 });
+        const center = toCenterData(videoEl.getAttribute('center-on-marker'));
+
+        markerData.push({
+          markerId: markerEl.id,
+          markerEl,
+          videoEl,
+          defaults: {
+            scaleX: scale.x,
+            scaleY: scale.y,
+            scaleZ: scale.z,
+            offsetX: center.xOffset,
+            offsetY: center.yOffset,
+            offsetZ: center.zOffset
+          }
+        });
+      });
+
+      if (!markerData.length) {
+        selectedLabel.textContent = 'No markers found';
+        return;
+      }
+
+      markerData.forEach((item, index) => {
+        const option = document.createElement('option');
+        option.value = String(index);
+        option.textContent = item.markerId;
+        markerSelect.appendChild(option);
+      });
+
+      let currentIndex = 0;
+
+      function syncSliderAndNumber(pair, value) {
+        pair.range.value = String(value);
+        pair.number.value = String(formatNum(value));
+      }
+
+      function applyTuning() {
+        const current = markerData[currentIndex];
+        if (!current) return;
+
+        const scaleX = readNum(controls.scaleX.number.value, 1);
+        const scaleY = readNum(controls.scaleY.number.value, 1);
+        const scaleZ = readNum(controls.scaleZ.number.value, 1);
+        const offsetX = readNum(controls.offsetX.number.value, 0);
+        const offsetY = readNum(controls.offsetY.number.value, 1.5);
+        const offsetZ = readNum(controls.offsetZ.number.value, 0);
+
+        current.videoEl.setAttribute('scale', `${scaleX} ${scaleY} ${scaleZ}`);
+        current.videoEl.setAttribute('center-on-marker', `xOffset: ${offsetX}; yOffset: ${offsetY}; zOffset: ${offsetZ}`);
+
+        const centerComponent = current.videoEl.components['center-on-marker'];
+        if (centerComponent && typeof centerComponent.updateCenter === 'function') {
+          centerComponent.updateCenter();
+        }
+
+        codeOutput.value = [
+          `<a-video src=\"#${current.videoEl.getAttribute('src').replace('#', '')}\"`,
+          `  scale=\"${formatNum(scaleX)} ${formatNum(scaleY)} ${formatNum(scaleZ)}\"`,
+          `  center-on-marker=\"xOffset: ${formatNum(offsetX)}; yOffset: ${formatNum(offsetY)}; zOffset: ${formatNum(offsetZ)}\">`,
+          `</a-video>`
+        ].join('\n');
+      }
+
+      function setCurrent(index) {
+        currentIndex = index;
+        const current = markerData[currentIndex];
+        if (!current) return;
+
+        const scale = toVector(current.videoEl.getAttribute('scale'), { x: 1, y: 1, z: 1 });
+        const center = toCenterData(current.videoEl.getAttribute('center-on-marker'));
+
+        syncSliderAndNumber(controls.scaleX, scale.x);
+        syncSliderAndNumber(controls.scaleY, scale.y);
+        syncSliderAndNumber(controls.scaleZ, scale.z);
+        syncSliderAndNumber(controls.offsetX, center.xOffset);
+        syncSliderAndNumber(controls.offsetY, center.yOffset);
+        syncSliderAndNumber(controls.offsetZ, center.zOffset);
+
+        selectedLabel.textContent = current.markerId;
+        applyTuning();
+      }
+
+      function onControlChange(pair, fromRange) {
+        const value = readNum(fromRange ? pair.range.value : pair.number.value, 0);
+        syncSliderAndNumber(pair, value);
+        applyTuning();
+      }
+
+      Object.values(controls).forEach(pair => {
+        pair.range.addEventListener('input', () => onControlChange(pair, true));
+        pair.number.addEventListener('input', () => onControlChange(pair, false));
+      });
+
+      markerSelect.addEventListener('change', e => {
+        const index = Number(e.target.value);
+        if (!Number.isNaN(index)) {
+          setCurrent(index);
+        }
+      });
+
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(codeOutput.value);
+          copyBtn.textContent = 'Copied';
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy Code';
+          }, 900);
+        } catch (error) {
+          console.log('Copy failed:', error);
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        const current = markerData[currentIndex];
+        if (!current) return;
+
+        syncSliderAndNumber(controls.scaleX, current.defaults.scaleX);
+        syncSliderAndNumber(controls.scaleY, current.defaults.scaleY);
+        syncSliderAndNumber(controls.scaleZ, current.defaults.scaleZ);
+        syncSliderAndNumber(controls.offsetX, current.defaults.offsetX);
+        syncSliderAndNumber(controls.offsetY, current.defaults.offsetY);
+        syncSliderAndNumber(controls.offsetZ, current.defaults.offsetZ);
+        applyTuning();
+      });
+
+      markerSelect.value = '0';
+      setCurrent(0);
+
+      function bindPair(rangeId, numberId) {
+        return {
+          range: document.getElementById(rangeId),
+          number: document.getElementById(numberId)
+        };
+      }
+
+      function readNum(value, fallback) {
+        const num = Number(value);
+        return Number.isFinite(num) ? num : fallback;
+      }
+
+      function formatNum(value) {
+        return Number(value).toFixed(2).replace(/\.00$/, '');
+      }
+
+      function toVector(rawValue, fallback) {
+        if (!rawValue) return fallback;
+        if (typeof rawValue === 'object') {
+          return {
+            x: readNum(rawValue.x, fallback.x),
+            y: readNum(rawValue.y, fallback.y),
+            z: readNum(rawValue.z, fallback.z)
+          };
+        }
+
+        const parts = String(rawValue).trim().split(/\s+/).map(Number);
+        return {
+          x: readNum(parts[0], fallback.x),
+          y: readNum(parts[1], fallback.y),
+          z: readNum(parts[2], fallback.z)
+        };
+      }
+
+      function toCenterData(rawValue) {
+        const defaultData = { xOffset: 0, yOffset: 1.5, zOffset: 0 };
+        if (!rawValue) return defaultData;
+
+        if (typeof rawValue === 'object') {
+          return {
+            xOffset: readNum(rawValue.xOffset, defaultData.xOffset),
+            yOffset: readNum(rawValue.yOffset, defaultData.yOffset),
+            zOffset: readNum(rawValue.zOffset, defaultData.zOffset)
+          };
+        }
+
+        const parsed = { ...defaultData };
+        String(rawValue).split(';').forEach(chunk => {
+          const [key, value] = chunk.split(':').map(text => text && text.trim());
+          if (!key || value === undefined) return;
+          if (key === 'xOffset') parsed.xOffset = readNum(value, parsed.xOffset);
+          if (key === 'yOffset') parsed.yOffset = readNum(value, parsed.yOffset);
+          if (key === 'zOffset') parsed.zOffset = readNum(value, parsed.zOffset);
+        });
+        return parsed;
+      }
+    }
+
     // Initialize media and unlock audio on first user interaction
     window.onload = function () {
       const videoIds = ['video1', 'video2', 'video3', 'video4', 'video5', 'video6', 'video7', 'video8'];
@@ -147,6 +481,8 @@
 
       document.addEventListener('click', unlockAudio, { once: true });
       document.addEventListener('touchstart', unlockAudio, { once: true });
+
+      initMarkerTuner();
     };
 
     AFRAME.registerComponent('marker-audio-handler', {
@@ -328,7 +664,9 @@
 
     AFRAME.registerComponent('center-on-marker', {
       schema: {
-        yOffset: { type: 'number', default: 1.5 }
+        xOffset: { type: 'number', default: 0 },
+        yOffset: { type: 'number', default: 1.5 },
+        zOffset: { type: 'number', default: 0 }
       },
 
       init: function () {
@@ -358,7 +696,7 @@
 
         const worldWidth = aspect * scale.x;
         const worldHeight = 1 * scale.y;
-        this.el.setAttribute('position', `${-worldWidth / 2} ${this.data.yOffset} ${-worldHeight / 2}`);
+        this.el.setAttribute('position', `${(-worldWidth / 2) + this.data.xOffset} ${this.data.yOffset} ${(-worldHeight / 2) + this.data.zOffset}`);
 
         this.lastScale.copy(scale);
       },
