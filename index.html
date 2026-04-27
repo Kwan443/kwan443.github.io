@@ -23,6 +23,7 @@
       position: fixed;
       top: 12px;
       right: 12px;
+      display: none;
       z-index: 10;
       width: min(340px, calc(100vw - 24px));
       padding: 12px;
@@ -175,7 +176,7 @@
 
     <a-marker id="marker3" type="pattern" preset="custom" url="assets/artwork3.patt" raycaster="objects: .clickable"
       emitevents="true" cursor="fuse: false; rayOrigin: mouse;" marker-rotation-smoother="alpha: 0.01">
-      <a-video src="#video3" scale="5.5 5.9 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
+      <a-video src="#video3" scale="7 7.5 1" class="clickable scaled-media" rotation="-90 0 0" gesture-handler
         loop video-handler center-on-marker="xOffset: -0.27; yOffset: 0; zOffset: -0.41" playsinline="true" preload="auto" autoplay="false"></a-video>
     </a-marker>
 
